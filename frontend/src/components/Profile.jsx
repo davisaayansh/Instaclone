@@ -2,10 +2,14 @@ import React, { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import useGetUserProfile from '@/hooks/useGetUserProfile';
 import { Link, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { AtSign, Heart, MessageCircle } from 'lucide-react';
+import { setAuthUser, setUserProfile } from '@/redux/authSlice';
+import axios from 'axios';
+import { toast } from 'sonner';
+
 
 const Profile = () => {
   const params = useParams();
@@ -14,15 +18,55 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState('posts');
 
   const { userProfile, user } = useSelector(store => store.auth);
+  const dispatch = useDispatch();
 
   const isLoggedInUserProfile = user?._id === userProfile?._id;
-  const isFollowing = false;
+  const isFollowing = user?.following?.includes(userProfile?._id);
+
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   }
 
   const displayedPost = activeTab === 'posts' ? userProfile?.posts : userProfile?.bookmarks;
+
+  const followUnfollowHandler = async () => {
+  try {
+    const res = await axios.post(
+      `http://localhost:8000/api/v1/user/followorunfollow/${userProfile._id}`,
+      {},
+      { withCredentials: true }
+    );
+
+    if (res.data.success) {
+      const alreadyFollowing = user.following.includes(userProfile._id);
+
+      const updatedAuthUser = {
+        ...user,
+        following: alreadyFollowing
+          ? user.following.filter(id => id !== userProfile._id)
+          : [...user.following, userProfile._id]
+      };
+
+      dispatch(setAuthUser(updatedAuthUser));
+
+      const updatedProfile = {
+        ...userProfile,
+        followers: alreadyFollowing
+          ? userProfile.followers.filter(id => id !== user._id)
+          : [...userProfile.followers, user._id]
+      };
+
+      dispatch(setUserProfile(updatedProfile));
+      toast.success(res.data.message);
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong");
+  }
+};
+
+
 
   return (
     <div className='flex max-w-5xl justify-center mx-auto pl-10'>
@@ -48,11 +92,11 @@ const Profile = () => {
                   ) : (
                     isFollowing ? (
                       <>
-                        <Button variant='secondary' className='h-8'>Unfollow</Button>
+                        <Button onClick={followUnfollowHandler} variant='secondary' className='h-8'>Unfollow</Button>
                         <Button variant='secondary' className='h-8'>Message</Button>
                       </>
                     ) : (
-                      <Button className='bg-[#0095F6] hover:bg-[#3192d2] h-8'>Follow</Button>
+                      <Button onClick={followUnfollowHandler} className='bg-[#0095F6] hover:bg-[#3192d2] h-8'>Follow</Button>
                     )
                   )
                 }
@@ -65,9 +109,10 @@ const Profile = () => {
               <div className='flex flex-col gap-1'>
                 <span className='font-semibold'>{userProfile?.bio || 'bio here...'}</span>
                 <Badge className='w-fit' variant='secondary'><AtSign /> <span className='pl-1'>{userProfile?.username}</span> </Badge>
-                <span>🤯Learn code with patel mernstack style</span>
-                <span>🤯Turing code into fun</span>
+                <span>🤯Learn code with Sandeep mernstack style</span>
                 <span>🤯DM for collaboration</span>
+                <span>🤯Turing code into fun</span>
+                <span><a href='https://euphonious-cranachan-1ea2a4.netlify.app/?#home"'>https://euphonious-cranachan-1ea2a4.netlify.app/?#home"</a></span>
               </div>
             </div>
           </section>

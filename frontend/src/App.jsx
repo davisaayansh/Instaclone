@@ -63,7 +63,6 @@ function App() {
       });
       dispatch(setSocket(socketio));
 
-      // listen all the events
       socketio.on('getOnlineUsers', (onlineUsers) => {
         dispatch(setOnlineUsers(onlineUsers));
       });
@@ -71,7 +70,6 @@ function App() {
       socketio.on('notification', (notification) => {
         dispatch(setLikeNotification(notification));
       });
-
       return () => {
         socketio.close();
         dispatch(setSocket(null));

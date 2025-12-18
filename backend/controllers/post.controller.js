@@ -5,6 +5,22 @@ import { User } from "../models/user.model.js";
 import { Comment } from "../models/comment.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
+
+export const getPostById = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId)
+      .populate("author", "username profilePicture")
+      .populate("comments.user", "username profilePicture");
+
+    if (!post) return res.status(404).json({ message: "Post not found" });
+
+    res.json({ success: true, post });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
+
+
 export const addNewPost = async (req, res) => {
     try {
         const { caption } = req.body;
@@ -249,7 +265,7 @@ export const bookmarkPost = async (req,res) => {
             return res.status(200).json({type:'unsaved', message:'Post removed from bookmark', success:true});
 
         }else{
-            // bookmark krna pdega
+            // bookmark
             await user.updateOne({$addToSet:{bookmarks:post._id}});
             await user.save();
             return res.status(200).json({type:'saved', message:'Post bookmarked', success:true});
