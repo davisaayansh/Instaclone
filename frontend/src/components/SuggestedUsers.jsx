@@ -18,7 +18,7 @@ const SuggestedUsers = ({onFollowUpdate}) => {
 const followHandler = async (targetId) => {
   try {
     const res = await axios.post(
-      `http://localhost:8000/api/v1/user/followorunfollow/${targetId}`,
+      `https://instaclone-0vg9.onrender.com/api/v1/user/followorunfollow/${targetId}`,
       {},
       { withCredentials: true }
     );

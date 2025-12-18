@@ -33,7 +33,7 @@ const Profile = () => {
   const followUnfollowHandler = async () => {
   try {
     const res = await axios.post(
-      `http://localhost:8000/api/v1/user/followorunfollow/${userProfile._id}`,
+      `https://instaclone-0vg9.onrender.com/api/v1/user/followorunfollow/${userProfile._id}`,
       {},
       { withCredentials: true }
     );
