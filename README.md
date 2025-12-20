@@ -5,14 +5,10 @@ A full-stack Instagram clone built using the MERN stack with real-time features 
 https://instaclone-0vg9.onrender.com
 
 🛠️ Tech Stack
-Frontend                                                    Backend
-⚛️ React.js                                              🟢 Node.js
-🧠 Redux Toolkit                                         🚂 Express.js
-🌐 React Router DOM                                      🍃 MongoDB + Mongoose
-🎨 Tailwind CSS                                           🔐 JWT Authentication
-🔔 Sonner (Toast Notifications)                          ☁️ Cloudinary (Image Uploads)
-🔌 Socket.IO Client                                       🔌 Socket.IO (Real-time communication)
-
+Frontend
+⚛️ React.js, 🧠 Redux Toolkit, 🌐 React Router DOM, 🎨 Tailwind CSS, 🔔 Sonner (Toast Notifications), 🔌 Socket.IO Client
+Backend
+🟢 Node.js, 🚂 Express.js, 🍃 MongoDB + Mongoose, 🔐 JWT Authentication, ☁️ Cloudinary (Image Uploads), 🔌 Socket.IO (Real-time communication)
 ✨ Features
 🔐 Authentication, User Signup & Login, JWT-based secure authentication, Protected routes
 👤 User
